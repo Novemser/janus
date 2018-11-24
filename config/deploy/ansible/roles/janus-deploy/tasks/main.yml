@@ -1,0 +1,15 @@
+- name: Prepare working directories
+  file:
+    path: /home/novemser/janus
+    state: directory
+
+- name: Copy janus binary
+  copy:
+    src: /media/novemser/BigBunny/Code/newJanus/janus/build.tar.gz
+    dest: /home/novemser/janus/build.tar.gz
+#  local_action: shell s "host is {{inventory_hostname}}"
+
+#- debug: msg="host is {{inventory_hostname}}"
+
+- name: Test connection
+  shell: ls /home/novemser/janus

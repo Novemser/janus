@@ -1,0 +1,4 @@
+- hosts: cluster_all
+  gather_facts: False
+  roles:
+    - janus-deploy
