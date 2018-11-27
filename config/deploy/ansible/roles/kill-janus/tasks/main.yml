@@ -1,0 +1,2 @@
+- name: Kill running deptran servers
+  shell: "ps -ef | grep -v grep | grep -w deptran_server | awk '{print $2}' | xargs kill -9"

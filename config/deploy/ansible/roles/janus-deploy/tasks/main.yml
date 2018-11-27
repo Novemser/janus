@@ -1,12 +1,31 @@
-- name: Prepare working directories
+#- name: Prepare working directories
+#  file:
+#    path: "{{ item }}"
+#    state: directory
+#  with_items:
+#    - /home/novemser/janus/tmp
+#    - /home/novemser/janus/archive
+#    - /home/novemser/janus/log
+- name: Clean working directories
   file:
     path: /home/novemser/janus
-    state: directory
+    state: absent
 
-- name: Copy janus binary
+- git: repo=https://github.com/Novemser/janus.git
+    dest=/home/novemser/janus
+    version=reproduce_result
+
+
+- name: Copy and prepare janus binary
+  unarchive:
+    src: /home/novemser/janus/build.tar.gz
+    dest: /home/novemser/janus
+
+- name: Copy generated python RPC file
   copy:
-    src: /media/novemser/BigBunny/Code/newJanus/janus/build.tar.gz
-    dest: /home/novemser/janus/build.tar.gz
+    src: /home/novemser/janus/deptran/rcc_rpc.py
+    dest: /home/novemser/janus/deptran
+
 #  local_action: shell s "host is {{inventory_hostname}}"
 
 #- debug: msg="host is {{inventory_hostname}}"
