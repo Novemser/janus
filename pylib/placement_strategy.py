@@ -37,18 +37,32 @@ class BalancedPlacementStrategy:
 		if len(data_centers) == 0:
 			return {'': sorted(hosts)}
 		else:
+			# result = {
+			# 	'us-west-2': ['val14', 'val15', 'val16'],
+			# 	'eu-west-1': ['val17', 'val18', 'val19'],
+			# 	'ap-northeast-2': ['val20', 'val21', 'val22', 'val23'],
+			# }
+			# return result
 			result = {}
 
 			for dc in data_centers:
 				result[dc] = []
 
 			for h in hosts:
-				for dc in data_centers:
-					if h.find(dc)==0:
-						result[dc].append(h)
-						break
+				if h < 'b17':
+					result['us-west-2'].append(h)
+				elif h < 'b20':
+					result['eu-west-1'].append(h)
+				else:
+					result['ap-northeast-2'].append(h)
+
+				# for dc in data_centers:
+				# 	if h.find(dc)==0:
+				# 		result[dc].append(h)
+				# 		break
 
 			sorted_result = { dc: sorted(value) for (dc, value) in result.iteritems() }
+			logging.info("using generated datacenter info {}".format(sorted_result))
 			return sorted_result
 
 	def generate_process(self, process, hosts, server_names, client_names):
@@ -71,7 +85,7 @@ class BalancedPlacementStrategy:
 		for dc in hosts.keys():
 			server_set = set(server_machines[dc])
 			all_set = set(hosts[dc])
-			clients = list(all_set - server_set)
+			clients = list(all_set)
 			client_machines[dc].extend(clients)
 			num_client_hosts += len(clients)
 
@@ -81,6 +95,7 @@ class BalancedPlacementStrategy:
 		datacenter_it = itertools.cycle(hosts.keys())
 
 		server_hosts_it = {dc: itertools.cycle(hosts) for (dc, hosts) in server_machines.iteritems()}
+		print client_machines
 		for server in server_names:
 			dc = datacenter_it.next()
 			server_host = server_hosts_it[dc].next()
@@ -98,6 +113,7 @@ class BalancedPlacementStrategy:
 				sys.exit(1)
 
 		client_hosts_it = {dc: itertools.cycle(hosts) for (dc, hosts) in client_machines.iteritems()}
+		# print client_machines, client_names
 		for client in client_names:
 			dc = datacenter_it.next()
 			client_host = client_hosts_it[dc].next()

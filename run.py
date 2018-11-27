@@ -817,6 +817,8 @@ class ServerController(object):
     def gen_process_cmd(self, process, host_process_counts):
         cmd = []
         cmd.append("cd " + deptran_home + "; ")
+        cmd.append("export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./build/libs; ")
+        cmd.append("ulimit -n 65536; ")
         cmd.append("mkdir -p " + self.log_dir + "; ")
         if (len(self.recording_path) != 0):
             recording = " -r '" + self.recording_path + "/deptran_server_" + process.name + "' "
@@ -830,7 +832,8 @@ class ServerController(object):
                "-d " + str(self.config['args'].c_duration) + " "
 
         for fn in self.config['args'].config_files:
-               s += "-f '" + fn + "' "
+                s += "-f '" + fn + "' "
+                subprocess.call(['scp', fn, process.host_address + ':' + fn])
 
         s += "-P '" + process.name + "' " + \
              "-p " + str(self.config['args'].rpc_port + process.id) + " " \
@@ -852,6 +855,7 @@ class ServerController(object):
         def run_one_server(process, process_name, host_process_counts):
             logger.info("starting %s @ %s", process_name, process.host_address)
             cmd = self.gen_process_cmd(process, host_process_counts)
+            print cmd
             logger.debug("running: %s", cmd)
             subprocess.call(['ssh', '-f',process.host_address, cmd])
 

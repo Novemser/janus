@@ -44,8 +44,8 @@ def environment():
         env.local_cwd = os.path.dirname(os.path.realpath(__file__))
         env.setdefault('remote_home', '/mnt/janus')
         env.setdefault('nfs_home', '/export/janus')
-        env.setdefault('git_repo', 'git@github.com:NYU-NEWS/janus.git')
-        env.setdefault('git_revision', 'master')
+        env.setdefault('git_repo', 'git@github.com:Novemser/janus.git')
+        env.setdefault('git_revision', 'reproduce_result')
         env.setdefault('py_virtual_env',
                        '{home}/py_venv'.format(home=env.nfs_home))
         env.setdefault('data_dir', '.ec2-data')

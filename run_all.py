@@ -20,14 +20,14 @@ import yaml
 
 
 
-DEFAULT_MODES = ["tpl_ww:multi_paxos",
+DEFAULT_MODES = ["2pl_ww:multi_paxos",
                  "occ:multi_paxos",
                  "tapir:tapir",
                  "brq:brq"]
 
 DEFAULT_CLIENTS = ["1:2"]
 DEFAULT_SERVERS = ["1:2"]
-DEFAULT_BENCHMARKS = [ "rw_benchmark", "tpccd" ]
+DEFAULT_BENCHMARKS = [ "rw_benchmark" ]
 DEFAULT_TRIAL_DURATION = 30
 DEFAULT_EXECUTABLE = "./run.py"
 
@@ -437,7 +437,7 @@ def main():
     args = parse_commandline()
     print_args(args)
     try:
-        os.setpgrp()
+        # os.setpgrp()
         run_experiments(args)
     except Exception:
         traceback.print_exc()

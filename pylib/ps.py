@@ -40,12 +40,13 @@ def ps(hosts, grep_filter):
 
 def killall(hosts, proc, param="-9"):
     def work(host, proc, param):
-        cmd = ['killall', '-q', param, proc]
+        cmd = ["ps -ef | grep ", proc, " | awk '{print $2}' | xargs kill", param]
         ssh_cmd = ['ssh', host]
         ssh_cmd.extend(cmd)
+        print ssh_cmd
         res = subprocess.call(ssh_cmd)
         if res != 0:
-            logging.error("host: {}; killall did not kill anything".format(res))
+            logging.error("host: {}; kill did not kill anything".format(res))
 
     threads=[]
     for host in hosts:
