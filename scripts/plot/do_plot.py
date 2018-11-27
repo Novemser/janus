@@ -5,7 +5,7 @@ import copy
 import subprocess
 from string import Template
 
-default_gnuplot_exe="gnuplot5"
+default_gnuplot_exe="gnuplot"
 default_gnuplot_cmds="./cmds.gnuplot"
 
 args = None
@@ -138,6 +138,7 @@ def main():
     logging.debug("data: {}".format(data_classes))
     txn_types = set([k[0] for k in data_classes.keys()])
     logging.info("Transaction Types: {}".format(txn_types))
+    logging.info("opening graphs file {}".format(args.graphs))
     for fn in args.graphs:
         with open(fn, 'r') as f:
             config = yaml.load(f)
