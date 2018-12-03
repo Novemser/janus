@@ -96,13 +96,14 @@ void ClientWorker::work() {
   piece->reg_all();
 
   if (ccsi) ccsi->wait_for_start(id);
-  Log_debug("after wait for start");
+  Log_info("after wait for start");
 
   timer_ = new Timer();
   timer_->start();
 
   if (config_->client_type_ == Config::Closed) {
     verify(n_concurrent_ > 0);
+    Log_info("Dispatch req n_concurrent_ %d", n_concurrent_);
     for (uint32_t n_txn = 0; n_txn < n_concurrent_; n_txn++) {
       auto coo = CreateCoordinator(n_txn);
       DispatchRequest(coo);

@@ -341,30 +341,36 @@ void BrqCoord::GotoNextPhase() {
   int current_phase = phase_ % n_phase; // for debug
   switch (phase_++ % n_phase) {
     case Phase::INIT_END:
+      Log_info("Phase::INIT_END->DISPATCH");
       PreDispatch();
       verify(phase_ % n_phase == Phase::DISPATCH);
       break;
     case Phase::DISPATCH:
       phase_++;
       verify(phase_ % n_phase == Phase::PRE_ACCEPT);
+      Log_info("Phase::DISPATCH->PRE_ACCEPT");
       PreAccept();
       break;
     case Phase::PRE_ACCEPT:
       if (fast_path_) {
         phase_++; // FIXME
         verify(phase_ % n_phase == Phase::COMMIT);
+        Log_info("Phase::PRE_ACCEPT->COMMIT(fast path)");
         Commit();
       } else {
         verify(phase_ % n_phase == Phase::ACCEPT);
+        Log_info("Phase::PRE_ACCEPT->ACCEPT(slow path)");
         Accept();
       }
       // TODO
       break;
     case Phase::ACCEPT:
       verify(phase_ % n_phase == Phase::COMMIT);
+      Log_info("Phase::ACCEPT->COMMIT");
       Commit();
       break;
     case Phase::COMMIT:
+      Log_info("Phase::COMMIT->INIT_END");
       verify(phase_ % n_phase == Phase::INIT_END);
       verify(committed_ != aborted_);
       if (committed_) {

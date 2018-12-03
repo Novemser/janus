@@ -85,7 +85,7 @@ class BalancedPlacementStrategy:
 		for dc in hosts.keys():
 			server_set = set(server_machines[dc])
 			all_set = set(hosts[dc])
-			clients = list(all_set)
+			clients = list(all_set - server_set)
 			client_machines[dc].extend(clients)
 			num_client_hosts += len(clients)
 

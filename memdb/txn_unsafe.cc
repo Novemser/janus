@@ -12,6 +12,7 @@ namespace mdb {
 bool TxnUnsafe::read_column(Row *row, column_id_t col_id, Value *value) {
   *value = row->get_column(col_id);
   // always allowed
+//  Log_info("Read txn unsafe %s", (*value).get_blob().data);
   return true;
 }
 

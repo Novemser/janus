@@ -3,7 +3,7 @@ bench:
   workload: rw_benchmark
   scale: 1
   weight:
-    read: 0 
+    read: 0
     write: 1
   population: # intial number of records in each table
     history: 1000000

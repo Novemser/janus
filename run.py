@@ -33,7 +33,7 @@ from deptran.rcc_rpc import ServerControlProxy
 from deptran.rcc_rpc import ClientControlProxy
 from pylib import ps
 
-LOG_LEVEL = logging.INFO
+LOG_LEVEL = logging.DEBUG
 LOG_FILE_LEVEL = logging.DEBUG
 logger = logging.getLogger('janus')
 #logger.addHandler(logging.StreamHandler())
@@ -818,7 +818,7 @@ class ServerController(object):
         cmd = []
         cmd.append("cd " + deptran_home + "; ")
         cmd.append("export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./build/libs; ")
-        cmd.append("ulimit -n 65536; ")
+        cmd.append("ulimit -n 1048576; ")
         cmd.append("mkdir -p " + self.log_dir + "; ")
         if (len(self.recording_path) != 0):
             recording = " -r '" + self.recording_path + "/deptran_server_" + process.name + "' "

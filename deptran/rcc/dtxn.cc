@@ -55,11 +55,13 @@ void RccDTxn::DispatchExecute(const SimpleCommand &cmd,
   } else {
     verify(0);
   }
+  Log_info("Before pair.txn_handler");
   pair.txn_handler(nullptr,
                    this,
                    const_cast<SimpleCommand&>(cmd),
                    yyy,
                    *output);
+  Log_info("After pair.txn_handler");
   *res = pair.defer;
 }
 

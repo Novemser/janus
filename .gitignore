@@ -29,3 +29,6 @@ deptran/mdcc/mdcc_rpc.h
 *rpc.h
 *.res
 *.prof
+archive*
+tmp
+cmake-build-debug/

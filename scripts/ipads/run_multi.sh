@@ -7,19 +7,20 @@ datacenters="us-west-2 eu-west-1 ap-northeast-2"
 function run_tests {
 	write_concurrent
 	
+#	tpcc_no 6
 	tpcc 6
 #	tpcc 3
 #	tpca_fixed 3
-	rw_fixed
+#	rw_fixed
 
-	zipf_graph 1
-	zipf_graph 3
-	zipf_graph 6
-	zipf_graph_open 6
+#	zipf_graph 1
+#	zipf_graph 3
+#	zipf_graph 6
+#	zipf_graph_open 6
 	#tpcc 3
 	#tpcc 6
-	rw
-	zipfs
+#	rw
+#	zipfs
 }
 
 function write_concurrent {
@@ -78,12 +79,27 @@ function tpcc {
 	shards=$1
 	if [[ shards -le 3 ]]
 	then
+		cpu=48
+	else
+		cpu=48
+	fi
+	exp_name=${prefix}_tpcc_${shards}
+#	./run_all.py -g -hh config/hosts-ipads.yml -cc config/client_closed.yml -cc /tmp/concurrent.yml -cc config/tpcc.yml -cc config/tapir.yml -b tpcc -m brq:brq -m 2pl_ww:multi_paxos -m occ:multi_paxos -m tapir:tapir -c 1 -c 2 -c 4 -c 8 -c 16 -c 20 -c 24 -c 28 -c 32 -s $shards -u $cpu -r 3 -d $duration $exp_name -dc $datacenters
+	./run_all.py -g -hh config/hosts-ipads.yml -cc config/client_closed.yml -cc /tmp/concurrent.yml -cc config/tpcc.yml -cc config/tapir.yml -b tpcc -m brq:brq -m 2pl_ww:multi_paxos -m occ:multi_paxos -m tapir:tapir -c 100 -c 400 -c 800 -c 1600 -c 3200 -c 6400 -c 8000 -c 9600 -c 11200 -c 12800 -s $shards -u $cpu -r 3 -d $duration --allow-client-overlap $exp_name
+	new_experiment $exp_name
+}
+
+function tpcc_no {
+	shards=$1
+	if [[ shards -le 3 ]]
+	then
 		cpu=1
 	else
 		cpu=2
 	fi
-	exp_name=${prefix}_tpcc_${shards}
-	./run_all.py -g -hh config/hosts-ipads.yml -cc config/client_closed.yml -cc /tmp/concurrent.yml -cc config/tpcc.yml -cc config/tapir.yml -b tpcc -m brq:brq -m 2pl_ww:multi_paxos -m occ:multi_paxos -m tapir:tapir -c 1 -c 10 -c 10 -c 400 -c 800 -c 1600 -c 3200 -c 6400 -c 8000 -c 9600 -c 11200 -c 12800 -s $shards -u $cpu -r 3 -d $duration $exp_name -dc $datacenters
+	exp_name=${prefix}_tpcc_no_${shards}
+#	./run_all.py -g -hh config/hosts-ipads.yml -cc config/client_closed.yml -cc /tmp/concurrent.yml -cc config/tpcc_no.yml -cc config/tapir.yml -b tpcc -m brq:brq -m 2pl_ww:multi_paxos -m occ:multi_paxos -m tapir:tapir -c 10 -s $shards -u $cpu -r 3 -d $duration $exp_name -dc $datacenters
+	./run_all.py -g -hh config/hosts-ipads.yml -cc config/client_closed.yml -cc /tmp/concurrent.yml -cc config/tpcc_no.yml -cc config/tapir.yml -b tpcc -m brq:brq -m 2pl_ww:multi_paxos -m occ:multi_paxos -m tapir:tapir -c 1 -c 10 -c 100 -c 400 -c 800 -c 1600 -c 3200 -c 6400 -c 8000 -c 9600 -c 11200 -c 12800 -s $shards -u $cpu -r 3 -d $duration --allow-client-overlap $exp_name -dc $datacenters
 	new_experiment $exp_name
 }
 
